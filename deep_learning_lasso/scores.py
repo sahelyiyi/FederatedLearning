@@ -24,15 +24,17 @@ def save_figures(new_w, W, lambda_lasso, base_model_output, true_labels):
 
     for i in range(N):
 
+        # the trained model output for all images
         trained_model_output = get_alg1_output(W[i], base_model_output)
-
-        alg1_output = get_alg1_output(new_w[i], base_model_output)
-
-        alg1_score = np.where(true_labels == alg1_output)[0].shape[0] / len(alg1_output)
-        alq1_scores.append(alg1_score)
-
+        # orange curve
         trained_model_score = np.where(true_labels == trained_model_output)[0].shape[0] / len(true_labels)
         trained_model_scores.append(trained_model_score)
+
+        # alg1 output for all images
+        alg1_output = get_alg1_output(new_w[i], base_model_output)
+        # blue curve
+        alg1_score = np.where(true_labels == alg1_output)[0].shape[0] / len(alg1_output)
+        alq1_scores.append(alg1_score)
 
     x_axis = [i for i in range(N)]
     plt.close()

@@ -4,7 +4,6 @@ import pandas as pd
 import tensorflow_datasets as tfds
 import tensorflow as tf
 
-
 from deep_learning_lasso.deep_learning_utils import *
 from deep_learning_lasso.deep_learning_utils import BATCH_SIZE, EPOCHS
 from deep_learning_lasso.models import get_NN_model
@@ -32,25 +31,17 @@ def convert_dataset_to_dataframe(dataset):
     return df
 
 
-scores_data = []
-for i in range(10):
-    model = get_NN_model()
-    ds, metadata = tfds.load(
-        "cats_vs_dogs",
-        shuffle_files = True,
-        with_info = True,
-    )
-
+def get_dataframe_and_datasets(ds):
     ds = ds['train']
     # ds_size = len(list(ds))
     ds_size = 23262
-    train_size = int(ds_size*0.75)
-    validate_size = int(ds_size*0.15)
-    test_size = int(ds_size*0.1)
+    train_size = int(ds_size * 0.75)
+    validate_size = int(ds_size * 0.15)
+    test_size = int(ds_size * 0.1)
 
     train_ds = ds.take(train_size)
     validation_ds = ds.skip(train_size).take(validate_size)
-    test_ds = ds.skip(train_size+validate_size).take(test_size)
+    test_ds = ds.skip(train_size + validate_size).take(test_size)
 
     train_df = convert_dataset_to_dataframe(train_ds)
     validate_df = convert_dataset_to_dataframe(validation_ds)
@@ -64,13 +55,33 @@ for i in range(10):
     validation_ds = validation_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
     test_ds = test_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
 
+    return train_ds, train_df, validation_ds, validate_df, test_ds, test_df
+
+
+data = []
+for i in range(10):
+
+    # get the model
+    model = get_NN_model()
+
+    # prepare train, validation, and test datasets
+    ds, metadata = tfds.load(
+        "cats_vs_dogs",
+        shuffle_files=True,
+        with_info=True,
+    )
+
+    train_ds, train_df, validation_ds, validate_df, test_ds, test_df = get_dataframe_and_datasets(ds)
+
+    # train the mode for the selected train and validation datasets
     start = datetime.datetime.now()
     model.fit(train_ds, epochs=EPOCHS, validation_data=validation_ds)
     print(datetime.datetime.now() - start)
 
+    # calculate the accuracy of the model for the test dataset
     pred_labels = model.predict(test_ds).flatten()
-    pred_labels[pred_labels<=0] = 0
-    pred_labels[pred_labels>0] = 1
+    pred_labels[pred_labels <= 0] = 0
+    pred_labels[pred_labels > 0] = 1
 
     true_labels = []
     for obj in test_ds:
@@ -80,7 +91,7 @@ for i in range(10):
     score = np.where(true_labels == pred_labels)[0].shape[0] / test_df.shape[0]
     print ('\n\n\nscore is: ', score)
 
-    scores_data.append({
+    data.append({
         'score': score,
         'train_df': train_df['filename'].values,
         'validate_df': validate_df['filename'].values,
@@ -88,5 +99,6 @@ for i in range(10):
         'weights': model.get_weights()[-2:],
     })
 
+# save trained data
 with open('new_deeplearning.json', 'w') as f:
-    f.write(json.dumps(scores_data, cls=NpEncoder))
+    f.write(json.dumps(data, cls=NpEncoder))

@@ -101,7 +101,7 @@ def parse_saved_data(data, base_model_output):
     return all_models_train_images, all_models_weights, X
 
 
-def load_trained_data(train_data_dir):
+def read_trained_data(train_data_dir):
     data = []
     for filename in sorted(os.listdir(train_data_dir)):
         if '.json' not in filename:
@@ -114,7 +114,7 @@ def load_trained_data(train_data_dir):
     return data
 
 
-def get_trained_data(train_data_dir, base_model_output):
-    data = load_trained_data(train_data_dir)
+def load_trained_data(train_data_dir, base_model_output):
+    data = read_trained_data(train_data_dir)
     all_models_train_images, all_models_weights, X = parse_saved_data(data, base_model_output)
     return all_models_train_images, all_models_weights, X
