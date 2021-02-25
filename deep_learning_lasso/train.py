@@ -1,10 +1,13 @@
 import json
+import datetime
 import pandas as pd
 import tensorflow_datasets as tfds
 import tensorflow as tf
 
 
 from deep_learning_lasso.deep_learning_utils import *
+from deep_learning_lasso.deep_learning_utils import BATCH_SIZE, EPOCHS
+from deep_learning_lasso.models import get_NN_model
 
 
 class NpEncoder(json.JSONEncoder):
@@ -19,21 +22,7 @@ class NpEncoder(json.JSONEncoder):
             return super(NpEncoder, self).default(obj)
 
 
-def train_model(model, train_generator, total_train, validation_generator, total_validate, batch_size, callbacks):
-    # epochs = 10
-    epochs = 2
-
-    history = model.fit_generator(
-        train_generator,
-        epochs=epochs,
-        validation_data=validation_generator,
-        validation_steps=total_validate // batch_size,
-        steps_per_epoch=total_train // batch_size,
-        callbacks=callbacks
-    )
-
-
-def get_df_from_ds(dataset):
+def convert_dataset_to_dataframe(dataset):
     file_names = []
     labels = []
     for obj in dataset:
@@ -63,28 +52,21 @@ for i in range(10):
     validation_ds = ds.skip(train_size).take(validate_size)
     test_ds = ds.skip(train_size+validate_size).take(test_size)
 
-    train_df = get_df_from_ds(train_ds)
-    validate_df = get_df_from_ds(validation_ds)
-    test_df = get_df_from_ds(test_ds)
+    train_df = convert_dataset_to_dataframe(train_ds)
+    validate_df = convert_dataset_to_dataframe(validation_ds)
+    test_df = convert_dataset_to_dataframe(test_ds)
 
-    size = (Image_Width, Image_Height)
+    train_ds = train_ds.map(lambda item: (tf.image.resize(item['image'], Image_Size), item['label']))
+    validation_ds = validation_ds.map(lambda item: (tf.image.resize(item['image'], Image_Size), item['label']))
+    test_ds = test_ds.map(lambda item: (tf.image.resize(item['image'], Image_Size), item['label']))
 
-    train_ds = train_ds.map(lambda item: (tf.image.resize(item['image'], size), item['label']))
-    validation_ds = validation_ds.map(lambda item: (tf.image.resize(item['image'], size), item['label']))
-    test_ds = test_ds.map(lambda item: (tf.image.resize(item['image'], size), item['label']))
-
-    batch_size = 32
-
-    train_ds = train_ds.cache().batch(batch_size).prefetch(buffer_size=10)
-    validation_ds = validation_ds.cache().batch(batch_size).prefetch(buffer_size=10)
-    test_ds = test_ds.cache().batch(batch_size).prefetch(buffer_size=10)
+    train_ds = train_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
+    validation_ds = validation_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
+    test_ds = test_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
 
     start = datetime.datetime.now()
-    epochs = 3
-    model.fit(train_ds, epochs=epochs, validation_data=validation_ds)
+    model.fit(train_ds, epochs=EPOCHS, validation_data=validation_ds)
     print(datetime.datetime.now() - start)
-    # callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
-    # model.fit(train_ds, validation_data=validation_ds, callbacks=[callback])
 
     pred_labels = model.predict(test_ds).flatten()
     pred_labels[pred_labels<=0] = 0
