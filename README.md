@@ -11,20 +11,21 @@ the other one is related to the transfer learning applications.
 1. deep_learning_lasso/ : Implementations related to the transfer learning experiments.
      - deep_learning_data/ : Stored data for the trained models.
      - train_models/train.py : Train the model for different training datasets and save the results.
-     - train_models/train_utils.py : utils functions related to training models.
-     - deep_learning_utils.py and deep_learning_utils.py : utils functions related to the experiment.
+     - train_models/train_utils.py : Utils functions related to training models.
+     - deep_learning_utils.py and deep_learning_utils.py : Utils functions related to the experiment.
      - main.py : load the saved data fro training the models, run algorithm1 on it and 
      then save the figures related to it.
      - models.py : Implementations for the base and the new model.
-     - scores.py : save the figures related to the experiment (the orange and blue figure).
+     - scores.py : save the figures related to the experiment (the orange and blue figure, Figure 5).
      
 2. regression_lasso/ : Implementations related to the regression experiments.
+     - reg_3d_road/reg_merge_3d_road.py: Create the graph related to 
+     [3D-road dataset](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+%5C%28North+Jutland%5C%2C+Denmark%5C%29)
+     and then run algorithm1 for it.
+     - reg_3d_road/reg_3d_road_utils.py: Utils functions related to 3d Road experiment.
      - main.py : get the graph data as the input, run algorithm1 on it and 
      then return the scores for it.
      - reg_complete.py : Create a complete graph and then run algorithm1 for it.
-     - reg_merge_3d_road.py : Create the graph related to 
-     [3D-road dataset](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+%5C%28North+Jutland%5C%2C+Denmark%5C%29)
-     and then run algorithm1 for it.
      - reg_sbm.py : Create the graph for SBM two clusters and also five clusters and 
      then run algorithm1 for each of them.
      - scores.py : Calculate the scores for the experiment after running algorithm1 for it.
