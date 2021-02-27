@@ -59,7 +59,7 @@ def get_dataframe_and_datasets(ds):
 
 
 data = []
-for i in range(10):
+for i in range(200):
 
     # get the model
     model = get_NN_model()
@@ -99,6 +99,6 @@ for i in range(10):
         'weights': model.get_weights()[-2:],
     })
 
-# save trained data
-with open('new_deeplearning.json', 'w') as f:
-    f.write(json.dumps(data, cls=NpEncoder))
+    # save trained data
+    with open('deep_learning_data/new_deeplearning_%d.json' % i, 'w') as f:
+        f.write(json.dumps(data, cls=NpEncoder))
