@@ -1,5 +1,7 @@
-from deep_learning_lasso.deep_learning_utils import *
+import numpy as np
+
 from algorithm import algorithm_1
+from deep_learning_lasso.models import get_base_model_output
 from deep_learning_lasso.tensorflow_dataset_utils import get_B_and_weight_vec, load_trained_data
 from deep_learning_lasso.scores import save_figures
 

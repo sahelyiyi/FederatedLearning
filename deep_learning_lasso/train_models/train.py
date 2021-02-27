@@ -1,8 +1,8 @@
 import json
 import datetime
+import numpy as np
 import tensorflow_datasets as tfds
 
-from deep_learning_lasso.deep_learning_utils import *
 from deep_learning_lasso.deep_learning_utils import EPOCHS
 from deep_learning_lasso.models import get_NN_model
 from deep_learning_lasso.train_models.train_utils import NpEncoder, get_dataframe_and_datasets
@@ -52,5 +52,5 @@ for i in range(n_models):
     }
 
     # save trained data
-    with open('deep_learning_data/new_deeplearning_%d.json' % i, 'w') as f:
+    with open('deep_learning_lasso/deep_learning_data/new_deeplearning_%d.json' % i, 'w') as f:
         f.write(json.dumps(model_data, cls=NpEncoder))

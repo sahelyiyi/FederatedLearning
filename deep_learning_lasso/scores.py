@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from deep_learning_lasso.deep_learning_utils import get_new_model
-from deep_learning_lasso.tensorflow_dataset_utils import get_base_model_outputs
+from deep_learning_lasso.models import get_new_model
 
 
 def get_alg1_output(model_new_w, pre_trained_results):

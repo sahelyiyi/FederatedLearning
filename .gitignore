@@ -1,5 +1,7 @@
 .DS_Store
 .DS_Store?
 
+*.pyc
+
 deep_learning_lasso/deep_learning_data/*
 !deep_learning_lasso/deep_learning_data/PALCEHOLDER
