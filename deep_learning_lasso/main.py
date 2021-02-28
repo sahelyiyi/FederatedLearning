@@ -39,9 +39,9 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
 
     # alg1
-    iteration_scores, new_w = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso)
+    iteration_scores, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso)
 
     # save the orange and blue fig
-    save_figures(new_w, W, lambda_lasso, base_model_output, true_labels)
+    save_figures(alg1_estimated_weights, W, lambda_lasso, base_model_output, true_labels)
 
-    return iteration_scores, new_w
+    return iteration_scores, alg1_estimated_weights

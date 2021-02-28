@@ -4,19 +4,31 @@ import matplotlib.pyplot as plt
 from deep_learning_lasso.models import get_new_model
 
 
-def get_alg1_output(model_new_w, pre_trained_results):
-    alg_1_weights = [np.array(model_new_w[:-1]).reshape(-1, 1), np.array(model_new_w[-1:])]
+def get_new_model_output(new_model_weights, base_model_output):
+    new_model_weights = [np.array(new_model_weights[:-1]).reshape(-1, 1), np.array(new_model_weights[-1:])]
+
     new_model = get_new_model()
-    new_model.set_weights(alg_1_weights)
-    our_predicts = new_model.predict(pre_trained_results).flatten()
-    our_predicts[our_predicts > 0] = 1
-    our_predicts[our_predicts <= 0] = 0
-    return our_predicts
+    new_model.set_weights(new_model_weights)
+
+    model_predicts = new_model.predict(base_model_output).flatten()
+    model_predicts[model_predicts > 0] = 1
+    model_predicts[model_predicts <= 0] = 0
+
+    return model_predicts
 
 
-def save_figures(new_w, W, lambda_lasso, base_model_output, true_labels):
+def save_figures(alg1_estimated_weights, original_weights, lambda_lasso, base_model_output, true_labels):
+    '''
 
-    N = len(new_w)
+    :param alg1_estimated_weights: the weights of the models estimated by algorithm 1
+    :param original_weights: the weights of the models based on network's training
+    :param lambda_lasso: lambda_lasso parameter used for algorithm 1
+    :param base_model_output: the output of the base model(pre-trained model) for all the images
+    :param true_labels: the true label of all the images
+
+    '''
+
+    N = len(alg1_estimated_weights)
 
     alq1_scores = []  # blue curve
     trained_model_scores = []  # orange curve
@@ -24,13 +36,13 @@ def save_figures(new_w, W, lambda_lasso, base_model_output, true_labels):
     for i in range(N):
 
         # the trained model output for all images
-        trained_model_output = get_alg1_output(W[i], base_model_output)
+        trained_model_output = get_new_model_output(original_weights[i], base_model_output)
         # orange curve
         trained_model_score = np.where(true_labels == trained_model_output)[0].shape[0] / len(true_labels)
         trained_model_scores.append(trained_model_score)
 
         # alg1 output for all images
-        alg1_output = get_alg1_output(new_w[i], base_model_output)
+        alg1_output = get_new_model_output(alg1_estimated_weights[i], base_model_output)
         # blue curve
         alg1_score = np.where(true_labels == alg1_output)[0].shape[0] / len(alg1_output)
         alq1_scores.append(alg1_score)
