@@ -6,17 +6,30 @@ from deep_learning_lasso.tensorflow_dataset_utils import get_B_and_weight_vec, l
 from deep_learning_lasso.scores import save_figures
 
 
-def get_Y_and_W(X, all_weights):
+def get_Y_and_W(X, trained_models_weights):
+    '''
+    :param X: A list of the features of algorithm 1
+    :param trained_models_weights: A list containing the weight of the new model based on training each model
+    '''
+
     Y = []
     W = []
     for i in range(len(X)):
-        weights = all_weights[i]
 
+        # The weights of the trainable layers (the new model) of the i_th trained model
+        weights = trained_models_weights[i]
+
+        # the weights of the dense layer of the model
         w1 = np.array(weights[-2]).flatten()
+
+        # the bias of the dense layer
         w2 = weights[-1]
+
+        # combining the weights and the bias of the dense layer of the model, which is the weight of the node for alg1
         w = np.concatenate((w1, w2))
         W.append(w)
 
+        # the label of the i_th node for alg1
         Y.append(X[i].dot(w))
 
     Y = np.array(Y)
@@ -30,30 +43,30 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     # calculate base model output and true labels for all images
     base_model_output, true_labels = get_base_model_output()
     '''
-    base_model_output: the output of the base(pre-trained) model for all the images
-    true_labels: the true label of all the images (which is 0 or 1 for each image)
+    base_model_output: A list containing the output of the base(pre-trained) model for all the images
+    true_labels: A list containing the true label of all the images (which is 0 or 1 for each image)
     '''
 
     # load trained data from saved models in train_data_dir
     trained_models_train_images, trained_models_weights, X = load_trained_data(train_data_dir, base_model_output)
     '''
-    trained_models_train_images: A list that contains the images used for training each model
-    trained_models_weights : A list of that contains the weight of the new model based on training each model
-    X : A list that contains the output of the base model for trainset of each model, which is the features used for algorithm 1
+    trained_models_train_images: A list containing the images used for training each model
+    trained_models_weights : A list containing the weight of the new model based on training each model
+    X : A list containing the output of the base model for trainset of each model, which is the features of algorithm 1
     '''
 
     # create B and weight_vec for the empirical graph G
     B, weight_vec = get_B_and_weight_vec(trained_models_train_images)
     E, N = B.shape
     '''
-    B : Incidence matrix if the empirical graph G
+    B : Incidence matrix of the empirical graph G
     weight_vec : Wight of each edge of the empirical graph G
     '''
 
     # calculate the labels(Y) and weights(W) of the empirical graph G
     Y, W = get_Y_and_W(X, trained_models_weights)
     '''
-    Y : The lables of the nodes for the algorihtm 1
+    Y : The labels of the nodes for the algorihtm 1
     W : The weights of the nodes for the algorihtm 1
     '''
 
@@ -62,11 +75,11 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     # samplingset = random.sample([i for i in range(N)], k=int(M * N))
     samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
     '''
-    samplingset : The samplingset used for algorithm 1
+    samplingset : The samplingset selected for algorithm 1
     '''
 
     # alg1
-    iteration_scores, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso)
+    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso)
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1
     '''
@@ -74,4 +87,4 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     # save the orange and blue fig
     save_figures(alg1_estimated_weights, W, lambda_lasso, base_model_output, true_labels)
 
-    return iteration_scores, alg1_estimated_weights
+    return alg1_estimated_weights

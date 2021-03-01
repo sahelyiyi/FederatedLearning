@@ -46,10 +46,13 @@ def get_base_model_data():
     return x, inputs
 
 
+# get the base(pre-trained) model
 def get_base_model():
     x, inputs = get_base_model_data()
     outputs = keras.layers.GlobalAveragePooling2D()(x)
+
     model = keras.Model(inputs, outputs)
+
     model.compile(
         optimizer=keras.optimizers.Adam(),
         loss=keras.losses.BinaryCrossentropy(from_logits=True),
@@ -59,11 +62,15 @@ def get_base_model():
     return model
 
 
+# get the new(trainable) model
 def get_new_model():
     inputs = keras.Input(shape=(2048,))
-    x = keras.layers.Dropout(0.2)(inputs)  # Regularize with dropout
+
+    x = keras.layers.Dropout(0.2)(inputs)
     outputs = keras.layers.Dense(1)(x)
+
     extra_model = keras.Model(inputs, outputs)
+
     extra_model.compile(
         optimizer=keras.optimizers.Adam(),
         loss=keras.losses.BinaryCrossentropy(from_logits=True),
@@ -73,6 +80,7 @@ def get_new_model():
     return extra_model
 
 
+# get the model
 def get_NN_model():
     # base model
     x, inputs = get_base_model_data()
@@ -95,25 +103,37 @@ def get_NN_model():
     return model
 
 
+# calculate base model output and true labels for all images
 def get_base_model_output():
+
+    # get the base model
     base_model = get_base_model()
 
-    (train_ds,), metadata = tfds.load(
+    # load the data from tensorflow dataset (all the images)
+    (dataset,), metadata = tfds.load(
         "cats_vs_dogs",
         split=["train[:100%]"],
         shuffle_files=True,
         with_info=True,
     )
 
-    train_ds = train_ds.map(lambda item: (tf.image.resize(item['image'], Image_Size), item['label']))
+    # resize the images of the dataset to the standard size
+    dataset = dataset.map(lambda item: (tf.image.resize(item['image'], Image_Size), item['label']))
+    dataset = dataset.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
 
-    train_ds = train_ds.cache().batch(BATCH_SIZE).prefetch(buffer_size=10)
+    # get the output of the base model for the dataset
+    base_model_outputs = base_model.predict(dataset)
+    '''
+    base_model_output: A list containing the output of the base(pre-trained) model for all the images
+    '''
 
-    base_model_outputs = base_model.predict(train_ds)
-
+    # obtain the true labels for the dataset
     true_labels = []
-    for obj in train_ds:
+    for obj in dataset:
         true_labels += list(np.array(obj[1]))
     true_labels = np.array(true_labels)
+    '''
+    true_labels: A list containing the true label of all the images (which is 0 or 1 for each image)
+    '''
 
     return base_model_outputs, true_labels

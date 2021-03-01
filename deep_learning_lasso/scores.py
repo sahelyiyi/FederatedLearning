@@ -20,11 +20,11 @@ def get_new_model_output(new_model_weights, base_model_output):
 def save_figures(alg1_estimated_weights, original_weights, lambda_lasso, base_model_output, true_labels):
     '''
 
-    :param alg1_estimated_weights: the weights of the models estimated by algorithm 1
-    :param original_weights: the weights of the models based on network's training
+    :param alg1_estimated_weights: A list containing the weights of the models estimated by algorithm 1
+    :param original_weights: A list containing the weights of the models based on training each model
     :param lambda_lasso: lambda_lasso parameter used for algorithm 1
-    :param base_model_output: the output of the base model(pre-trained model) for all the images
-    :param true_labels: the true label of all the images
+    :param base_model_output: A list containing the output of the base model(pre-trained model) for all the images
+    :param true_labels: A list containing the true label of all the images
 
     '''
 

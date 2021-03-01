@@ -79,21 +79,38 @@ def get_trained_model_weights(raw_model_weights):
     return model_weights
 
 
+# get the trained dataset and weights of each trained model and also the features of algorithm 1
 def parse_saved_data(data, base_model_output):
+
     all_images_indices = get_all_images_dict(data)
+    '''
+    all_images_indices: a dictionary from image_name to index
+    '''
     all_images_size = len(all_images_indices.keys())
+    '''
+    all_images_size : total number of images of the (tensorflow) dataset
+    '''
 
     all_models_train_images = []
     all_models_weights = []
     X = []
     for model_data in data:
+
         base_model_train_images_output, model_train_images = get_model_train_images_data(model_data['train_df'], all_images_indices, all_images_size, base_model_output)
+        '''
+        base_model_train_images_output: the output of the base model for the training dataset of this model
+        model_train_images: a vector from 0/1 with the size of "all_images_size", model_train_images[i] = 1 if 
+                the image with the index i is in the train dataset of this model otherwise model_train_images[i] = 0
+        '''
 
         X.append(np.array(base_model_train_images_output))
 
         all_models_train_images.append(model_train_images)
 
         model_weights = get_trained_model_weights(model_data['weights'])
+        '''
+        model_weights: the weights of this model for the new model (trainable layers)
+        '''
         all_models_weights.append(model_weights)
 
     X = np.array(X)
@@ -101,7 +118,8 @@ def parse_saved_data(data, base_model_output):
     return all_models_train_images, all_models_weights, X
 
 
-def read_trained_data(train_data_dir):
+# read the trained models data from saved files
+def read_trained_data_from_saved_files(train_data_dir):
     data = []
     for filename in sorted(os.listdir(train_data_dir)):
         if '.json' not in filename:
@@ -115,6 +133,19 @@ def read_trained_data(train_data_dir):
 
 
 def load_trained_data(train_data_dir, base_model_output):
-    data = read_trained_data(train_data_dir)
+
+    # read the trained models data from saved files
+    data = read_trained_data_from_saved_files(train_data_dir)
+    '''
+    data: saved data from the trained models
+    '''
+
+    # get the trained dataset and weights of each trained model and also the features of algorithm 1
     all_models_train_images, all_models_weights, X = parse_saved_data(data, base_model_output)
+    '''
+    all_models_train_images: A list containing the images used for training each model
+    all_models_weights : A list containing the weight of the new model based on training each model
+    X : A list containing the output of the base model for trainset of each model, which is the features of algorithm 1
+    '''
+
     return all_models_train_images, all_models_weights, X
