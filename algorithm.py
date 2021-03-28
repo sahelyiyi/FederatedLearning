@@ -66,8 +66,8 @@ class LogisticOptimizer(Optimizer):
     def __init__(self, tau, X, Y):
         super(Optimizer).__init__()
         self.tau = tau
-        self.X = X
-        self.Y = Y
+        self.X = tf.constant(X, dtype=tf.float64)
+        self.Y = tf.constant(Y, dtype=tf.float64)
 
     def optimize(self, idx, hat_w):
         def make_val_and_grad_fn(value_fn):
@@ -82,7 +82,7 @@ class LogisticOptimizer(Optimizer):
             t0 = time.time()
             yield
             dt = time.time() - t0
-            # print('Evaluation took: %f seconds' % dt)
+            print('Evaluation took: %f seconds' % dt)
 
         def np_value(tensor):
             if isinstance(tensor, tuple):
@@ -92,21 +92,24 @@ class LogisticOptimizer(Optimizer):
 
         def run(optimizer):
             optimizer()
-            with timed_execution():
-                result = optimizer()
+            # with timed_execution():
+            result = optimizer()
             return np_value(result)
 
         def regression_loss(params):
-            labels = tf.constant(Y[idx], dtype=tf.float64)
-            feature = tf.constant(X[idx], dtype=tf.float64)
+            labels = Y[idx]
+            feature = X[idx]
             new_params = tf.expand_dims(params, 1)
             logits = tf.matmul(feature, new_params)
             labels = tf.expand_dims(labels, 1)
 
-            mse_loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=labels, logits=logits))
             w = tf.expand_dims(tf.constant(hat_w[idx], dtype=tf.float64), 1)
+
             penalty_var = tf.math.subtract(w, params)
             loss_penalty = regularization_factor * tf.nn.l2_loss(penalty_var)
+
+            mse_loss = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(labels=labels, logits=logits))
+
             total_loss = mse_loss + loss_penalty
 
             return total_loss
@@ -157,7 +160,7 @@ def algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso, score_func=me
             print ('iter:', iterk)
         prev_w = np.copy(new_w)
 
-        hat_w = new_w - np.dot(Gamma, np.dot(D.T, new_u))  # could  be negative
+        hat_w = new_w - np.dot(Gamma, np.dot(D.T, new_u))
 
         for i in range(N):
             if i in samplingset:
@@ -166,7 +169,7 @@ def algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso, score_func=me
                 new_w[i] = hat_w[i]
 
         tilde_w = 2 * new_w - prev_w
-        new_u = new_u + np.dot(Sigma, np.dot(D, tilde_w))  # chould be negative
+        new_u = new_u + np.dot(Sigma, np.dot(D, tilde_w))
 
         normalized_u = np.where(abs(new_u) >= limit)
         new_u[normalized_u] = limit[normalized_u] * new_u[normalized_u] / abs(new_u[normalized_u])

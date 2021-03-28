@@ -1,7 +1,13 @@
 .DS_Store
 .DS_Store?
+.idea/
 
+*/__pycache__/
 *.pyc
+*.pyo
 
 deep_learning_lasso/deep_learning_data/*
 !deep_learning_lasso/deep_learning_data/PALCEHOLDER
+
+deep_learning_lasso/new_deeplarning_data/*
+!deep_learning_lasso/new_deeplarning_data/PALCEHOLDER

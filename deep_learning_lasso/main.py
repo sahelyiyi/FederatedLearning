@@ -1,3 +1,4 @@
+import random
 import numpy as np
 
 from algorithm import algorithm_1
@@ -38,7 +39,7 @@ def get_Y_and_W(X, trained_models_weights):
     return Y, W
 
 
-def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/deep_learning_data'):
+def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/new_deeplarning_data'):
 
     # calculate base model output and true labels for all images
     base_model_output, true_labels = get_base_model_output()
@@ -48,11 +49,12 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     '''
 
     # load trained data from saved models in train_data_dir
-    trained_models_train_images, trained_models_weights, X = load_trained_data(train_data_dir, base_model_output)
+    trained_models_train_images, trained_models_weights, X, Y = load_trained_data(train_data_dir, base_model_output, true_labels)
     '''
     trained_models_train_images: A list containing the images used for training each model
     trained_models_weights : A list containing the weight of the new model based on training each model
     X : A list containing the output of the base model for trainset of each model, which is the features of algorithm 1
+    Y : A list containing the true labels for trainset of each model, which is the labels of algorithm 1
     '''
 
     # create B and weight_vec for the empirical graph G
@@ -63,23 +65,24 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     weight_vec : Wight of each edge of the empirical graph G
     '''
 
-    # calculate the labels(Y) and weights(W) of the empirical graph G
-    Y, W = get_Y_and_W(X, trained_models_weights)
+    # calculate the weights(W) of the empirical graph G
+    _, W = get_Y_and_W(X, trained_models_weights)
+    print ("hereee", Y.shape, W.shape, X.shape, true_labels.shape)
     '''
-    Y : The labels of the nodes for the algorihtm 1
     W : The weights of the nodes for the algorihtm 1
     '''
 
     # choose sampling set for alg1
     M=0.2
-    # samplingset = random.sample([i for i in range(N)], k=int(M * N))
-    samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
+    samplingset = random.sample([i for i in range(N)], k=int(M * N))
+    # samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
     '''
     samplingset : The samplingset selected for algorithm 1
     '''
 
     # alg1
-    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso)
+    print ('start alg')
+    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso, loss_func='logistic_reg')
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1
     '''
