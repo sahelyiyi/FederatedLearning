@@ -28,4 +28,4 @@ def run_reg_complete(K=300, N=100, lambda_lasso=1/3, M=0.2):
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
 
-    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, method='norm')
+    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso)

@@ -164,7 +164,7 @@ def read_trained_data_from_saved_files(train_data_dir):
         if '.json' not in filename:
             continue
         num = filename.split('_')[-1].replace('.json', '')
-        if int(num) >= 50:
+        if int(num) >= 100:
             continue
         with open(os.path.join(train_data_dir, filename), 'r') as f:
             data.append(json.load(f))

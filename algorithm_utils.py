@@ -35,6 +35,7 @@ class Optimizer(ABC):
             loss = loss1 + loss2
             loss.backward()
             self.optimizer.step()
+
         return self.model.linear.weight.data.numpy()
 
 
