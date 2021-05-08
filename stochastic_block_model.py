@@ -1,7 +1,6 @@
 from numpy.random import normal
 from graspy.simulations import sbm
 import numpy as np
-from scipy.sparse import csr_matrix
 
 
 def get_B_and_weight_vec(n, pin=0.5, pout=0.01, mu_in=8, mu_out=2):

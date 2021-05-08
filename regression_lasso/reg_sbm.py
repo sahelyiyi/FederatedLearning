@@ -34,7 +34,7 @@ def run_reg_sbm_2blocks(K, lambda_lasso, m, n, N1=150, N2=150, M=0.2):
     W = np.array(W)
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
-    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, method='norm')
+    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso)
 
 
 def run_reg_sbm_5blocks(K, lambda_lasso, m=5, n=2, M=0.2):
@@ -68,7 +68,7 @@ def run_reg_sbm_5blocks(K, lambda_lasso, m=5, n=2, M=0.2):
     W = np.array(W)
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
-    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, method='norm')
+    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso)
 
 # run_reg_sbm_2blocks(K=2000, lambda_lasso=0.5, m=5, n=15)
 # run_reg_sbm_2blocks(K=2000, lambda_lasso=1, m=5, n=2) -> 0.0001
