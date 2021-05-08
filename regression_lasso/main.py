@@ -4,9 +4,9 @@ from algorithm_utils import prepare_data_for_algorithm1
 from regression_lasso.scores import get_scores
 
 
-def reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso=0.1):
+def reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso=0.1, loss_func='linear_reg'):
 
-    data = prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg')
+    data = prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func)
 
     iteration_scores, new_w = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso)
 

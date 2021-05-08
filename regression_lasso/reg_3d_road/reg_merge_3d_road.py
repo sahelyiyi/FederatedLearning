@@ -9,7 +9,7 @@ def run_reg_merge_3d_road(K=1000, lambda_lasso=0.1):
 
     B, weight_vec, Y, X = get_graph_data(data)
 
-    N, E = B.shape
+    E, N = B.shape
     samplingset = random.sample([i for i in range(N)], k=int(0.7 * N))
 
     # lambda_lasso = 0.1  # nLasso parameter

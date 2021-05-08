@@ -40,7 +40,7 @@ def get_Y_and_W(X, trained_models_weights):
     return Y, W
 
 
-def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/new_deeplarning_data'):
+def deep_learning_run(lambda_lasso=0.001, K=1000, train_data_dir='deep_learning_lasso/deep_learning_data'):
 
     # calculate base model output and true labels for all images
     base_model_output, true_labels = get_base_model_output()
@@ -67,7 +67,7 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
     '''
 
     # calculate the weights(W) of the empirical graph G
-    _, W = get_Y_and_W(X, trained_models_weights)
+    Y, W = get_Y_and_W(X, trained_models_weights)
     print ("hereee", Y.shape, W.shape, X.shape, true_labels.shape)
     '''
     W : The weights of the nodes for the algorihtm 1

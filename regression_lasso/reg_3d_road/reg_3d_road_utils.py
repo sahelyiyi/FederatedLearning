@@ -3,7 +3,7 @@ from collections import defaultdict, Counter
 from math import sqrt
 
 
-def load_data(data_path='3D_spatial_network.txt'):
+def load_data(data_path='regression_lasso/reg_3d_road/3D_spatial_network.txt'):
     with open(data_path, 'r') as f:
         data = f.read().split('\n')
     data = data[:-1]
@@ -16,18 +16,19 @@ def load_data(data_path='3D_spatial_network.txt'):
     return fixed_data
 
 
-def merge_locations(data):
+def merge_locations(data, cnt=5):
     sorted_lats = sorted(data, key=lambda x: x[3])
 
     merged_data = []
-    for i in range(int(len(sorted_lats) / 5)):
+    for i in range(int(len(sorted_lats) / cnt)):
         merge_cell = []
-        for j in range(5):
-            merge_cell.append(sorted_lats[i * 5 + j])
+        for j in range(cnt):
+            merge_cell.append(sorted_lats[i * cnt + j])
         merged_data.append(merge_cell)
     merged_data = np.array(merged_data)
 
     return merged_data
+
 
 def get_graph_data(data):
     merged_data = merge_locations(data)

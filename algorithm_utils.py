@@ -85,14 +85,37 @@ def get_gamma_vec(B):
     return Gamma_vec
 
 
+def prepare_linear_reg_data_for_algorithm1(X, Y, Gamma_vec, samplingset):
+    MTX1_INV, MTX2 = get_preprocessed_matrices(samplingset, Gamma_vec, X, Y)
+
+    data = {}
+    for i in range(len(X)):
+        data[i] = {
+            'features': X[i],
+            'degree': Gamma_vec[i]
+        }
+
+        if i in samplingset:
+            model = LinearModel(MTX1_INV[i], MTX2[i])
+            optimizer = LinearOptimizer(model)
+
+            data[i].update({
+                'label': Y[i],
+                'optimizer': optimizer}
+            )
+
+    return data
+
+
 def prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg'):
     Gamma_vec = get_gamma_vec(B)
 
     if loss_func == 'linear_reg':
-        MTX1_INV, MTX2 = get_preprocessed_matrices(samplingset, Gamma_vec, X, Y)
+        return prepare_linear_reg_data_for_algorithm1(X, Y, Gamma_vec, samplingset)
 
     data = {}
     for i in range(len(X)):
+
         data[i] = {
             'features': Variable(torch.from_numpy(X[i])).to(torch.float32),
             'degree': Gamma_vec[i]
@@ -100,21 +123,19 @@ def prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg'):
 
         if i in samplingset:
             _, n = X[i].shape
-            if loss_func == 'linear_reg':
-                model = LinearModel(MTX1_INV[i], MTX2[i])
-                optimizer = LinearOptimizer(model)
-            elif loss_func == 'torch_linear_reg':
-                model = TorchLinearModel(n)
+            model = TorchLinearModel(n)
+            if loss_func == 'torch_linear_reg':
                 optimizer = TorchLinearOptimizer(model)
             elif loss_func == 'logistic_reg':
-                model = TorchLinearModel(n)
                 optimizer = TorchLogisticOptimizer(model)
             else:
                 print('invalid loss_func')
+                return
+
             data[i].update({
                 'label': Variable(torch.from_numpy(np.array(Y[i]))).to(torch.float32),
-                'optimizer': optimizer}
-            )
+                'optimizer': optimizer
+            })
 
     return data
 
