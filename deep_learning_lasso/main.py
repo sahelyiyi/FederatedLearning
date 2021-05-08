@@ -2,6 +2,7 @@ import random
 import numpy as np
 
 from algorithm import algorithm_1
+from algorithm_utils import prepare_data_for_algorithm1
 from deep_learning_lasso.models import get_base_model_output
 from deep_learning_lasso.tensorflow_dataset_utils import get_B_and_weight_vec, load_trained_data
 from deep_learning_lasso.scores import save_figures
@@ -82,7 +83,8 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
 
     # alg1
     print ('start alg')
-    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, X, Y, samplingset, lambda_lasso, loss_func='logistic_reg')
+    data = prepare_data_for_algorithm1(B, X, Y, loss_func='linear_reg')
+    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso)
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1
     '''
