@@ -75,15 +75,15 @@ def deep_learning_run(lambda_lasso, K=1000, train_data_dir='deep_learning_lasso/
 
     # choose sampling set for alg1
     M=0.2
-    samplingset = random.sample([i for i in range(N)], k=int(M * N))
-    # samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
+    # samplingset = random.sample([i for i in range(N)], k=int(M * N))
+    samplingset = [53, 92, 99, 19, 16, 32, 6, 9, 39, 43, 34, 54, 23, 8, 13, 88, 1, 62, 22, 60]
     '''
     samplingset : The samplingset selected for algorithm 1
     '''
 
     # alg1
     print ('start alg')
-    data = prepare_data_for_algorithm1(B, X, Y, loss_func='linear_reg')
+    data = prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg')
     _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso)
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1

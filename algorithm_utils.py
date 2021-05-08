@@ -7,9 +7,9 @@ from abc import ABC
 from torch.autograd import Variable
 
 
-class OurModel(torch.nn.Module):
+class TorchLinearModel(torch.nn.Module):
     def __init__(self, n):
-        super(OurModel, self).__init__()
+        super(TorchLinearModel, self).__init__()
         self.linear = torch.nn.Linear(n, 1, bias=False)
 
     def forward(self, x):
@@ -35,26 +35,48 @@ class Optimizer(ABC):
             loss = loss1 + loss2
             loss.backward()
             self.optimizer.step()
+        return self.model.linear.weight.data.numpy()
+
+
+class LinearModel:
+    def __init__(self, mtx1_inv, mtx2):
+        self.mtx1_inv = mtx1_inv
+        self.mtx2 = mtx2
+
+    def forward(self, x):
+        mtx2 = x + self.mtx2
+        mtx_inv = self.mtx1_inv
+
+        return np.dot(mtx_inv, mtx2)
 
 
 class LinearOptimizer(Optimizer):
+
+    def __init__(self, model):
+        super(LinearOptimizer, self).__init__(model, None, None)
+
+    def optimize(self, x_data, y_data, oldweight, regularizerterm):
+        return self.model.forward(oldweight)
+
+
+class TorchLinearOptimizer(Optimizer):
     def __init__(self, model):
         criterion = torch.nn.MSELoss(reduction='mean')
         optimizer = torch.optim.RMSprop(model.parameters())
-        super(LinearOptimizer, self).__init__(model, optimizer, criterion)
+        super(TorchLinearOptimizer, self).__init__(model, optimizer, criterion)
 
     def optimize(self, x_data, y_data, oldweight, regularizerterm):
-        super(LinearOptimizer, self).optimize(x_data, y_data, oldweight, regularizerterm)
+        return super(TorchLinearOptimizer, self).optimize(x_data, y_data, oldweight, regularizerterm)
 
 
-class LogisticOptimizer(Optimizer):
+class TorchLogisticOptimizer(Optimizer):
     def __init__(self, model):
         criterion = torch.nn.BCELoss(reduction='mean')
         optimizer = torch.optim.RMSprop(model.parameters())
-        super(LogisticOptimizer, self).__init__(model, optimizer, criterion)
+        super(TorchLogisticOptimizer, self).__init__(model, optimizer, criterion)
 
     def optimize(self, x_data, y_data, oldweight, regularizerterm):
-        super(LogisticOptimizer, self).optimize(x_data, y_data, oldweight, regularizerterm)
+        return super(TorchLogisticOptimizer, self).optimize(x_data, y_data, oldweight, regularizerterm)
 
 
 def get_gamma_vec(B):
@@ -62,23 +84,37 @@ def get_gamma_vec(B):
     return Gamma_vec
 
 
-def prepare_data_for_algorithm1(B, X, Y, loss_func='linear_reg'):
+def prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg'):
     Gamma_vec = get_gamma_vec(B)
 
-    data = []
+    if loss_func == 'linear_reg':
+        MTX1_INV, MTX2 = get_preprocessed_matrices(samplingset, Gamma_vec, X, Y)
+
+    data = {}
     for i in range(len(X)):
-        _, n = X[i].shape
-        model = OurModel(n)
-        if loss_func == 'linear_reg':
-            optimizer = LinearOptimizer(model)
-        elif loss_func == 'logistic_reg':
-            optimizer = LogisticOptimizer(model)
-        else:
-            print('invalid loss_func')
-        data.append({'features': Variable(torch.from_numpy(X[i])).to(torch.float32),
-                     'label': Variable(torch.from_numpy(np.array(Y[i]))).to(torch.float32),
-                     'degree': Gamma_vec[i],
-                     'optimizer': optimizer})
+        data[i] = {
+            'features': Variable(torch.from_numpy(X[i])).to(torch.float32),
+            'degree': Gamma_vec[i]
+        }
+
+        if i in samplingset:
+            _, n = X[i].shape
+            if loss_func == 'linear_reg':
+                model = LinearModel(MTX1_INV[i], MTX2[i])
+                optimizer = LinearOptimizer(model)
+            elif loss_func == 'torch_linear_reg':
+                model = TorchLinearModel(n)
+                optimizer = TorchLinearOptimizer(model)
+            elif loss_func == 'logistic_reg':
+                model = TorchLinearModel(n)
+                optimizer = TorchLogisticOptimizer(model)
+            else:
+                print('invalid loss_func')
+            data[i].update({
+                'label': Variable(torch.from_numpy(np.array(Y[i]))).to(torch.float32),
+                'optimizer': optimizer}
+            )
+
     return data
 
 

@@ -27,8 +27,7 @@ def algorithm_1(K, B, weight_vec, data, true_labels, samplingset, lambda_lasso, 
         for i in range(N):
             if i in samplingset:
                 optimizer = data[i]['optimizer']
-                optimizer.optimize(data[i]['features'], data[i]['label'], hat_w[i], data[i]['degree'])
-                new_w[i] = optimizer.model.linear.weight.data.numpy()
+                new_w[i] = optimizer.optimize(data[i]['features'], data[i]['label'], hat_w[i], data[i]['degree'])
             else:
                 new_w[i] = hat_w[i]
 
