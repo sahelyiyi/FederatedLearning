@@ -18,13 +18,11 @@ class Penalty(ABC):
 class Norm2Pelanty(Penalty):
     def __init__(self, lambda_lasso, weight_vec, Sigma, n):
         super(Norm2Pelanty, self).__init__(lambda_lasso, weight_vec, Sigma, n)
-        self.limit = np.array([np.zeros(n) for i in range(len(weight_vec))])
-        for i in range(n):
-            self.limit[:, i] = lambda_lasso * weight_vec
+        self.limit = np.array(lambda_lasso * weight_vec)
 
     def update(self, new_u):
-        normalized_u = np.where(np.linalg.norm(new_u) >= self.limit)
-        new_u[normalized_u] = self.lambda_lasso * new_u[normalized_u] / np.linalg.norm(new_u[normalized_u])
+        normalized_u = np.where(np.linalg.norm(new_u, axis=1) >= self.limit)
+        new_u[normalized_u] = (new_u[normalized_u].T * self.limit[normalized_u] / np.linalg.norm(new_u[normalized_u], axis=1)).T
         return new_u
 
 
