@@ -17,8 +17,8 @@ def algorithm_1(K, B, weight_vec, data, true_labels, samplingset, lambda_lasso, 
 
     iteration_scores = []
     for iterk in range(K):
-        if iterk % 100 == 0:
-            print ('iter:', iterk)
+        # if iterk % 100 == 0:
+        #     print ('iter:', iterk)
         prev_w = np.copy(new_w)
 
         hat_w = new_w - np.dot(Gamma, np.dot(D.T, new_u))
