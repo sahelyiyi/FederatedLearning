@@ -4,8 +4,8 @@ from stochastic_block_model import get_B_and_weight_vec
 from regression_lasso.main import *
 
 
-def run_reg_sbm_2blocks(K=500, lambda_lasso=0.01, m=5, n=2, N1=150, N2=150, M=0.2, penalty_func='norm1'):
-    B, weight_vec = get_B_and_weight_vec([N1, N2], pout=0.001, mu_in=40, mu_out=10)
+def get_sbm_2blocks_data(N1, N2, m, n, M, pin=0.5, pout=0.001):
+    B, weight_vec = get_B_and_weight_vec([N1, N2], pin=pin, pout=pout, mu_in=40, mu_out=10)
     E, N = B.shape
 
     X = []
@@ -34,11 +34,15 @@ def run_reg_sbm_2blocks(K=500, lambda_lasso=0.01, m=5, n=2, N1=150, N2=150, M=0.
     W = np.array(W)
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
+    return B, weight_vec, Y, X, samplingset
 
+
+def run_reg_sbm_2blocks(K=500, lambda_lasso=0.01, m=5, n=2, N1=150, N2=150, M=0.2, penalty_func='norm1'):
+    B, weight_vec, Y, X, samplingset = get_sbm_2blocks_data(N1, N2, m, n, M)
     return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, penalty_func=penalty_func)
 
 
-def run_reg_sbm_5blocks(K=500, lambda_lasso=0.001, m=5, n=2, M=0.2, penalty_func='norm1'):
+def get_sbm_5blocks_data(m, n, M):
     block_sizes = [70, 10, 50, 100, 150]
     blocks_num = len(block_sizes)
     B, weight_vec = get_B_and_weight_vec(block_sizes, pout=0.001, mu_in=40, mu_out=10)
@@ -69,6 +73,11 @@ def run_reg_sbm_5blocks(K=500, lambda_lasso=0.001, m=5, n=2, M=0.2, penalty_func
     W = np.array(W)
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
+    return B, weight_vec, Y, X, samplingset
+
+
+def run_reg_sbm_5blocks(K=500, lambda_lasso=0.001, m=5, n=2, M=0.2, penalty_func='norm1'):
+    B, weight_vec, Y, X, samplingset = get_sbm_5blocks_data(m, n, M)
     return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, penalty_func=penalty_func)
 
 # run_reg_sbm_2blocks(K=2000, lambda_lasso=0.5, m=5, n=15)
