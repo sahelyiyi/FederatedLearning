@@ -4,7 +4,7 @@ from regression_lasso.main import reg_run
 from regression_lasso.reg_3d_road.reg_3d_road_utils import load_data, get_graph_data
 
 
-def run_reg_merge_3d_road(K=1000, lambda_lasso=0.1):
+def run_reg_merge_3d_road(K=1000, lambda_lasso=0.1, penalty_func='norm1'):
     data = load_data()
 
     B, weight_vec, Y, X = get_graph_data(data)
@@ -15,7 +15,7 @@ def run_reg_merge_3d_road(K=1000, lambda_lasso=0.1):
     # lambda_lasso = 0.1  # nLasso parameter
     # lambda_lasso = 0.08  # nLasso parameter
 
-    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso)
+    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, penalty_func=penalty_func)
 
 
 # lambda=0.1, M=0.7

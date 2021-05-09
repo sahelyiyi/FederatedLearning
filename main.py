@@ -14,6 +14,9 @@ def parse_arguments():
     parser.add_argument('-n', '--name', type=str, default='sbm_2',
                         help='Experiment name: sbm_2, sbm_5, 3d_road, complete, deep_learning')
 
+    parser.add_argument('-p', '--penalty', type=str, default='norm1',
+                        help='penalty function of algprithm 1: norm1, norm2, mocha')
+
     parser.add_argument('-l', '--lambda_lasso', type=float, default=0.001,
                         help='lambda parameter of the algorithm which is a float')
 
@@ -29,16 +32,17 @@ if __name__ == '__main__':
     args = parse_arguments()
     lambda_lasso = args.lambda_lasso
     K = args.iters
+    penalty_func = args.penalty
     if args.name == 'sbm_2':
-        print(run_reg_sbm_2blocks())
+        print(run_reg_sbm_2blocks(penalty_func=penalty_func))
     elif args.name == 'sbm_5':
-        print(run_reg_sbm_5blocks())
+        print(run_reg_sbm_5blocks(penalty_func=penalty_func))
     elif args.name == '3d_road':
-        print(run_reg_merge_3d_road())
+        print(run_reg_merge_3d_road(penalty_func=penalty_func))
     elif args.name == 'complete':
-        print (run_reg_complete())
+        print (run_reg_complete(penalty_func=penalty_func))
     elif args.name == 'deep_learning':
-        print(deep_learning_run())
+        print(deep_learning_run(penalty_func=penalty_func))
     else:
         print("invalid experiment name")
 

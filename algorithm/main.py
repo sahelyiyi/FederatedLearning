@@ -1,22 +1,21 @@
 import numpy as np
 
-from algorithm_utils import get_matrices
+from algorithm.algorithm_utils import get_matrices
+from algorithm.penalty import get_penalty
 
 
-def algorithm_1(K, B, weight_vec, data, true_labels, samplingset, lambda_lasso, score_func=None):
+def algorithm_1(K, B, weight_vec, data, true_labels, samplingset, lambda_lasso, penalty_func_name='norm1', score_func=None):
     Sigma, Gamma, Gamma_vec, D = get_matrices(weight_vec, B)
 
     E, N = B.shape
     m, n = data[0]['features'].shape
 
+    penalty_func = get_penalty(penalty_func_name, lambda_lasso, weight_vec, Sigma, n)
+
     new_w = np.array([np.zeros(n) for i in range(N)])
     new_u = np.array([np.zeros(n) for i in range(E)])
 
     iteration_scores = []
-    limit = np.array([np.zeros(n) for i in range(E)])
-    for i in range(n):
-        limit[:, i] = lambda_lasso * weight_vec
-
     for iterk in range(K):
         if iterk % 100 == 0:
             print ('iter:', iterk)
@@ -34,8 +33,7 @@ def algorithm_1(K, B, weight_vec, data, true_labels, samplingset, lambda_lasso, 
         tilde_w = 2 * new_w - prev_w
         new_u = new_u + np.dot(Sigma, np.dot(D, tilde_w))
 
-        normalized_u = np.where(abs(new_u) >= limit)
-        new_u[normalized_u] = limit[normalized_u] * new_u[normalized_u] / abs(new_u[normalized_u])
+        new_u = penalty_func.update(new_u)
 
         if score_func:
             Y_pred = []

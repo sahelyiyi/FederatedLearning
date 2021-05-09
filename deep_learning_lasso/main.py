@@ -1,8 +1,7 @@
-import random
 import numpy as np
 
-from algorithm import algorithm_1
-from algorithm_utils import prepare_data_for_algorithm1
+from algorithm.main import algorithm_1
+from algorithm.algorithm_utils import prepare_data_for_algorithm1
 from deep_learning_lasso.models import get_base_model_output
 from deep_learning_lasso.tensorflow_dataset_utils import get_B_and_weight_vec, load_trained_data
 from deep_learning_lasso.scores import save_figures
@@ -40,7 +39,7 @@ def get_Y_and_W(X, trained_models_weights):
     return Y, W
 
 
-def deep_learning_run(lambda_lasso=0.001, K=1000, train_data_dir='deep_learning_lasso/deep_learning_data'):
+def deep_learning_run(lambda_lasso=0.001, K=1000, penalty_func='norm1', train_data_dir='deep_learning_lasso/deep_learning_data'):
 
     # calculate base model output and true labels for all images
     base_model_output, true_labels = get_base_model_output()
@@ -84,7 +83,7 @@ def deep_learning_run(lambda_lasso=0.001, K=1000, train_data_dir='deep_learning_
     # alg1
     print ('start alg')
     data = prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg')
-    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso)
+    _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso, penalty_func)
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1
     '''

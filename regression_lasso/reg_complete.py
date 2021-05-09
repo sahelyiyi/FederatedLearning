@@ -23,9 +23,9 @@ def get_graph_data(N):
     return B, weight_vec, Y, X
 
 
-def run_reg_complete(K=300, N=100, lambda_lasso=1/3, M=0.2):
+def run_reg_complete(K=300, N=100, lambda_lasso=1/3, M=0.2, penalty_func='norm1'):
     B, weight_vec, Y, X = get_graph_data(N)
 
     samplingset = random.sample([i for i in range(N)], k=int(M * N))
 
-    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso)
+    return reg_run(K, B, weight_vec, Y, X, samplingset, lambda_lasso, penalty_func=penalty_func)

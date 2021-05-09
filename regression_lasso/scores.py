@@ -19,7 +19,7 @@ def get_algorithm_1_scores(X, Y, new_w, functions, samplingset, not_samplingset)
         alg_1_score['train'][score_func_name] = score_func(Y[samplingset], Y_pred[samplingset])
         alg_1_score['test'][score_func_name] = score_func(Y[not_samplingset], Y_pred[not_samplingset])
 
-    return alg_1_score
+    return dict(alg_1_score)
 
 
 def get_linear_regression_score(x, y, functions, decision_tree_samplingset, decision_tree_not_samplingset):
@@ -33,7 +33,7 @@ def get_linear_regression_score(x, y, functions, decision_tree_samplingset, deci
         linear_regression_score['test'][score_func_name] = score_func(y[decision_tree_not_samplingset],
                                                                       pred_y[decision_tree_not_samplingset])
 
-    return linear_regression_score
+    return dict(linear_regression_score)
 
 
 def get_decision_tree_score(x, y, functions, decision_tree_samplingset, decision_tree_not_samplingset):
@@ -48,7 +48,7 @@ def get_decision_tree_score(x, y, functions, decision_tree_samplingset, decision
                                                                    pred_y[decision_tree_samplingset])
         decision_tree_score['test'][score_func_name] = score_func(y[decision_tree_not_samplingset],
                                                                   pred_y[decision_tree_not_samplingset])
-    return decision_tree_score
+    return dict(decision_tree_score)
 
 
 def get_scores(X, Y, new_w, samplingset):
