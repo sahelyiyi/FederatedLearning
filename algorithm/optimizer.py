@@ -5,6 +5,7 @@ import numpy as np
 from abc import ABC
 
 
+# The linear model which is implemented by pytorch
 class TorchLinearModel(torch.nn.Module):
     def __init__(self, n):
         super(TorchLinearModel, self).__init__()
@@ -15,6 +16,7 @@ class TorchLinearModel(torch.nn.Module):
         return y_pred
 
 
+# The abstract optimizer model which should have model, optimizer, and criterion as the input
 class Optimizer(ABC):
     def __init__(self, model, optimizer, criterion):
         self.model = model
@@ -37,8 +39,15 @@ class Optimizer(ABC):
         return self.model.linear.weight.data.numpy()
 
 
+# The linear model in Networked Linear Regression section of the paper
 class LinearModel:
-    def __init__(self, mtx1_inv, mtx2):
+    def __init__(self, degree, features, label):
+        mtx1 = 2 * degree * np.dot(features.T, features).astype('float64')
+        mtx1 += 1 * np.eye(mtx1.shape[0])
+        mtx1_inv = np.linalg.inv(mtx1)
+
+        mtx2 = 2 * degree * np.dot(features.T, label).T
+
         self.mtx1_inv = mtx1_inv
         self.mtx2 = mtx2
 
@@ -49,6 +58,7 @@ class LinearModel:
         return np.dot(mtx_inv, mtx2)
 
 
+# The Linear optimizer in Networked Linear Regression section of the paper
 class LinearOptimizer(Optimizer):
 
     def __init__(self, model):
@@ -58,6 +68,7 @@ class LinearOptimizer(Optimizer):
         return self.model.forward(old_weight)
 
 
+# The Linear optimizer model which is implemented by pytorch
 class TorchLinearOptimizer(Optimizer):
     def __init__(self, model):
         criterion = torch.nn.MSELoss(reduction='mean')
@@ -68,6 +79,7 @@ class TorchLinearOptimizer(Optimizer):
         return super(TorchLinearOptimizer, self).optimize(x_data, y_data, old_weight, regularizer_term)
 
 
+# The Logistic optimizer model which is implemented by pytorch
 class TorchLogisticOptimizer(Optimizer):
     def __init__(self, model):
         criterion = torch.nn.BCELoss(reduction='mean')
