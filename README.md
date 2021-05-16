@@ -94,7 +94,7 @@ python main.py --name sbm_5
 ### 3D Road Network Dataset
 
 This dataset is constructed by adding elevation information to the [3D road 
-network in North Jutland, Denmark](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+(North+Jutland,+Denmark\)) (covering a region of 185 × 135 km2), 
+network in North Jutland, Denmark](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+(North+Jutland,+Denmark)#) (covering a region of 185 × 135 km2), 
 containing LATITUDE, LONGITUDE, and also ALTITUDE of regions. 
 We consider a graph G represents this dataset, which its nodes
 are initially the combined 5 nearest regions and are connected 
