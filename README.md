@@ -17,6 +17,8 @@ The package related to the algorithm implementation is `algorithm` which has the
     * the different penalty functions for the dual optimizers explained in the paper, 
     `norm2`, `MOCHA`, and `norm1`
  
+For running your own primal and dual optimizers you can inherit a class from `class Optimizer` 
+and `class Penalty` respectively.
 
 ## Requirements
 
@@ -34,67 +36,132 @@ In this repository we have multiple experiments
 
 ### Stochastic Block Model
 
-
-
-Create SBM
-Creating the SBM with two clusters 
-<img src="https://render.githubusercontent.com/render/math?math=|C_1| = |C_2| = 100"> .
-
-Two nodes within the same cluster are connected by an edge with probability `pin`, 
-Two nodes from different clusters are connected by an edge with probability `pout`. 
-Each node <img src="https://render.githubusercontent.com/render/math?math=i \in V"> represents a local dataset consisting of 
+* With Two Clusters: This SBM has two clusters |C<sub>1</sub>| =  |C<sub>2</sub>| = 100.
+Two nodes within the same cluster are connected by an edge with probability `pin=0.5`, 
+and two nodes from different clusters are connected by an edge with probability `pout=0.01`. 
+Each node i &in; V represents a local dataset consisting of 
 `m` feature vectors 
-<img src="https://render.githubusercontent.com/render/math?math=x^{(i,1)} , . . . , x^{(i,m)} \in R^n"> . 
-The feature vectors are i.i.d. realizations of a standard Gaussian random vector 
-<img src="https://render.githubusercontent.com/render/math?math=x \sim N(0,I)">. The labels 
-<img src="https://render.githubusercontent.com/render/math?math=y^{(i)}_1,...,y^{(i)}_m \in R">
- of the nodes Each node <img src="https://render.githubusercontent.com/render/math?math=i \in V">
-are generated according to the linear model 
-<img src="https://render.githubusercontent.com/render/math?math=y^{(i)}_r = (x^{(i,r)})^T \bar{w}^{(i)} + \epsilon"> , 
-with <img src="https://render.githubusercontent.com/render/math?math=\epsilon \sim N(0,\sigma)">, 
-weight vector 
-<img src="https://render.githubusercontent.com/render/math?math=w^{(i)} = (2, 2)^T">
-for <img src="https://render.githubusercontent.com/render/math?math=i \in C_1"> ,  and 
-<img src="https://render.githubusercontent.com/render/math?math=w^{(i)} = (-2, 2)^T">
-for for <img src="https://render.githubusercontent.com/render/math?math=i \in C_2">.
+x<sup>(i,1)</sup>, ... , x<sup>(i,m)</sup> &in; R<sup>n</sup> . 
+The feature vectors are i.i.d. realizations of a standard Gaussian random vector x ~ N(0,I).
+The labels y<sup>i</sup><sub>1</sub>, ... , y<sup>i</sup><sub>m</sub> &in; R for each node i &in; V
+are generated according to the linear model y<sup>i</sup><sub>r</sub> = (x<sup>(i, r)</sup>)<sup>T</sup>w&#772;<sup>(i)</sup> +  &epsilon; , 
+with &epsilon; &in; N(0,&sigma;), weight vector w<sup>(i)</sup> = (2, 2)<sup>T</sup>
+for i &in; C<sub>1</sub>, and w<sup>(i)</sup> = (-2, 2)<sup>T</sup> for i &in; C<sub>2</sub>. 
+We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
+as the result we compare the MSE of Algorithm 1 with plain linear regression 
+and decision tree regression, please run :
 
-To train the model(s) in the paper, run this command:
-
-```train
-python train.py --input-data <path_to_data> --alpha 10 --beta 20
+```code
+python main.py --name sbm_2
 ```
 
 >📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
-## Evaluation
 
-To evaluate my model on ImageNet, run:
 
-```eval
-python eval.py --model-file mymodel.pth --benchmark imagenet
+| Method name                    | Train MSE       | Tes MSE        |
+| ------------------             |---------------- | -------------- |
+| algorithm 1                    |    0.0061       |     0.0065     |
+| plain linear regression        |    3.977        |     4.237      |
+| decision tree regression       |    4.056        |     4.603      |
+
+
+
+* With Five Clusters: The size of the clusters are {70, 10, 50, 100, 150} 
+with random weight vectors ∈ R<sup>2</sup> selected uniformly from [0,1) . 
+We run Algorithm 1 with a fixed pin = 0.5 and pout = 0.001, 
+and a fixed number of 500 iterations. The tuning parameter &lambda; in algorithm1 
+is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 . 
+We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
+as the result we compare the MSE of Algorithm 1 with plain linear regression 
+and decision tree regression, please run :
+
+```code
+python main.py --name sbm_5
 ```
 
->📋  Describe how to evaluate the trained models on benchmarks reported in the paper, give commands that produce the results (section below).
 
-## Pre-trained Models
 
-You can download pretrained models here:
+| Method name                    | Train MSE       | Tes MSE        |
+| ------------------             |---------------- | -------------- |
+| algorithm 1                    |    0.0004       |     0.0007     |
+| plain linear regression        |    0.1237       |     0.1137     |
+| decision tree regression       |    0.2337       |     0.2368     |
 
-- [My awesome model](https://drive.google.com/mymodel.pth) trained on ImageNet using parameters x,y,z. 
 
->📋  Give a link to where/how the pretrained models can be downloaded and how they were trained (if applicable).  Alternatively you can have an additional column in your results table with a link to the models.
+### 3D Road Network Dataset
 
-## Results
+This dataset is constructed by adding elevation information to the [3D road 
+network in North Jutland, Denmark](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+(North+Jutland,+Denmark\)) (covering a region of 185 × 135 km2), 
+containing LATITUDE, LONGITUDE, and also ALTITUDE of regions. 
+We consider a graph G represents this dataset, which its nodes
+are initially the combined 5 nearest regions and are connected 
+by edges to their nearby neighbours with the weights that are 
+related to the distances between them. So the feature vector 
+X<sup>(i)</sup> ∈ R<sup>5*2</sup> of node i ∈ V contains 
+the latitude and longitude of the combined regions, and the 
+label y<sup>(i)</sup> ∈ R<sup>5</sup> is their altitudes.
 
-Our model achieves the following performance on :
+We use Algorithm 1 to learn the weight vectors w<sup>(i)</sup>
+for a localized linear model. We assume that labels y<sup>(i)</sup>
+are available for 70% of the graph nodes, thus, for 30% of the nodes 
+in G we do not know the labels y<sup>(i)</sup> but predict them with the 
+weight vectors w&#770;<sup>(i)</sup> obtained from Algorithm 1 
+(using a fixed number of 1000 iterations, and λ = 0.1).
+We compare the MSE of our method with simple linear regression 
+and decision tree regression. please run :
 
-### [Image Classification on ImageNet](https://paperswithcode.com/sota/image-classification-on-imagenet)
+```code
+python main.py --name 3d_road
+```
 
-| Model name         | Top 1 Accuracy  | Top 5 Accuracy |
-| ------------------ |---------------- | -------------- |
-| My awesome model   |     85%         |      95%       |
+### Networked Federated Deep Learning
 
->📋  Include a table of results from your paper, and link back to the leaderboard for clarity and context. If your main result is a figure, include that figure and link to the command or notebook to reproduce it. 
+In this section, we tested our method with Tensorflow ”cats vs dogs” Classification Dataset.
+For both datasets, each node of the empirical graph G stands for 
+a deep neural network in which the base model is 
+Xception (with 132 layers) and has trained on the ImageNet dataset, 
+also the new model containes a Global Average Pooling 2D, a Dropout, 
+and a Dense layer (with linear activation, Adam optimizer, 
+and Binary Cross Entropy loss function) respectively. 
+The difference between the nodes is their training datasets.
+Suppose that the training dataset for the node i is 
+img<sub>1</sub>, ..., img<sub>t</sub>, 
+we consider the result of the base model for the rth train image (img<sub>r</sub>) 
+as the feature vector (x<sup>(i, r)</sup>), 
+and the result of the new model as its label (y<sup>i</sup><sub>r</sub>), 
+and w<sup>i</sup> is the weight vector of its Dense layer and 
+the aim of this experiment is to estimate the weight vectors, 
+w<sup>i</sup> of all the nodes.
+
+The total number of nodes is 100, each node is connected to its 
+3 nearest neighbours, the ones with the highest weights. 
+We select 20 random nodes as the samplingset for Algorithm 1 
+(with λ = 0.001 and a fixed number of 1000 iterations). 
+Our method has increased the overall accuracy of the nodes in a significant
+shorter time, the needed time for training each model with 
+three learning epochs is almost 20 minutes, so training 100 models 
+lasts 2000 minutes, while the computation time for our algorithm 
+itself is less than 2 minutes. by adding the time for training 
+the sampling set, which is 20 nodes, the total time would be 402 minutes 
+(402 << 2000).
+
+
+![Screenshot](train_accuracy_0.001.png)
+
+Fig: The accuracy for each model obtained after 1000 number of iterations 
+used in Algorithm 1 based on the squared error loss . 
+In each figure, the blue line shows the accuracy of the models 
+based on the weights estimated by our method and the orange line shows 
+the accuracy of the models by training its weights by the deep neural 
+network after three epochs.
+
+
+For reproducing the image please run :
+
+```code
+python main.py --name deep_learning
+```
 
 
 ## Contributing
