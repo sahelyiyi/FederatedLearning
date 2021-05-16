@@ -4,16 +4,18 @@ This repository is the official implementation of [Federated Multi-Task Learning
 
 ![alt text](algorithm1.png)
 
-The package related to the algorithm implementation is `algorithm` which has the following structure.
+The package related to the algorithm implementation is 
+[algorithm](https://github.com/sahelyiyi/FederatedLearning/tree/master/algorithm)
+ which has the following structure.
 
-* main.py 
+* [main.py](https://github.com/sahelyiyi/FederatedLearning/blob/master/algorithm/main.py)
     * the implementation of algorithm 1
-* optimizer.py 
+* [optimizer.py](https://github.com/sahelyiyi/FederatedLearning/blob/master/algorithm/optimizer.py)
     * the primal optimizer for the loss functions, we have implemented 
     the squared error loss, and the logistic loss with `pytorch` 
     and also the straight forward primal optimizer in the 
     Networked Linear Regression section which is much faster than the `pytorch` one
-* penalty.py
+* [penalty.py](https://github.com/sahelyiyi/FederatedLearning/blob/master/algorithm/penalty.py)
     * the different penalty functions for the dual optimizers explained in the paper, 
     `norm2`, `MOCHA`, and `norm1`
  
