@@ -153,7 +153,7 @@ the sampling set, which is 20 nodes, the total time would be 402 minutes
 
 Fig: The accuracy for each model obtained after 1000 number of iterations 
 used in Algorithm 1 based on the squared error loss . 
-In each figure, the blue line shows the accuracy of the models 
+In this figure, the blue line shows the accuracy of the models 
 based on the weights estimated by our method and the orange line shows 
 the accuracy of the models by training its weights by the deep neural 
 network after three epochs.
