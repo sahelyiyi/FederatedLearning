@@ -2,9 +2,6 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error
-from collections import defaultdict
-
-from utils import nmse_func
 
 
 def get_algorithm_1_scores(X, Y, new_w, samplingset, not_samplingset):
@@ -45,7 +42,15 @@ def get_decision_tree_score(x, y, decision_tree_samplingset, decision_tree_not_s
     return decision_tree_score
 
 
-def get_scores(X, Y, new_w, samplingset):
+def get_scores(datapoints, new_w, samplingset):
+    X = []
+    Y = []
+    for i in range(len(datapoints)):
+        X.append(np.array(datapoints[i]['features']))
+        Y.append(np.array(datapoints[i]['label']))
+
+    X = np.array(X)
+    Y = np.array(Y)
 
     N = len(X)
     m, n = X[0].shape
