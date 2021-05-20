@@ -1,4 +1,4 @@
-# Federated Multi-Task Learning from Big Data over Networks
+commit -m ''# Federated Multi-Task Learning from Big Data over Networks
 
 This repository is the official implementation of [Federated Multi-Task Learning from Big Data over Networks](https://arxiv.org/abs/2030.12345) paper. 
 
@@ -51,7 +51,7 @@ with &epsilon; &in; N(0,&sigma;), weight vector w<sup>(i)</sup> = (2, 2)<sup>T</
 for i &in; C<sub>1</sub>, and w<sup>(i)</sup> = (-2, 2)<sup>T</sup> for i &in; C<sub>2</sub>. 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
-and decision tree regression, please run :
+and decision tree regression, please the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
 ```code
 python main.py --name sbm_2
@@ -63,9 +63,9 @@ python main.py --name sbm_2
 
 | Method name                    | Train MSE       | Tes MSE        |
 | ------------------             |---------------- | -------------- |
-| algorithm 1                    |    0.0061       |     0.0065     |
-| plain linear regression        |    3.977        |     4.237      |
-| decision tree regression       |    4.056        |     4.603      |
+| algorithm 1                    |    7.11e-06     |     9.18e-06   |
+| plain linear regression        |    3.150        |     4.212      |
+| decision tree regression       |    3.338        |     4.598      |
 
 
 
@@ -76,19 +76,14 @@ and a fixed number of 500 iterations. The tuning parameter &lambda; in algorithm
 is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 . 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
-and decision tree regression, please run :
-
-```code
-python main.py --name sbm_5
-```
-
+and decision tree regression, please see the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
 
 | Method name                    | Train MSE       | Tes MSE        |
 | ------------------             |---------------- | -------------- |
-| algorithm 1                    |    0.0004       |     0.0007     |
-| plain linear regression        |    0.1237       |     0.1137     |
-| decision tree regression       |    0.2337       |     0.2368     |
+| algorithm 1                    |    6.22e-06     |     8.99e-06   |
+| plain linear regression        |    0.1270       |     0.1344     |
+| decision tree regression       |    0.3158       |     0.3075     |
 
 
 ### 3D Road Network Dataset
