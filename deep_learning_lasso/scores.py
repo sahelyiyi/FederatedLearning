@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from deep_learning_lasso.models import get_new_model
 
 
+# calculate new model output for all images
 def get_new_model_output(new_model_weights, base_model_output):
     new_model_weights = [np.array(new_model_weights[:-1]).reshape(-1, 1), np.array(new_model_weights[-1:])]
 

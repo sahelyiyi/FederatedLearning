@@ -15,10 +15,8 @@ def get_dist(first_node, second_node):
 # calculate the adjacency matrix and the weight vector of the empirical graph G
 def get_B_and_weight_vec(all_models_train_images, neigh_cnt=3):
     '''
-
     :param trained_models_train_images: A list containing the images used for training each model
     :param neigh_cnt: number of the neighbors for each node of the empirical graph G
-
     '''
 
     N = len(all_models_train_images)
