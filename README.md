@@ -51,7 +51,7 @@ with &epsilon; &in; N(0,&sigma;), weight vector w<sup>(i)</sup> = (2, 2)<sup>T</
 for i &in; C<sub>1</sub>, and w<sup>(i)</sup> = (-2, 2)<sup>T</sup> for i &in; C<sub>2</sub>. 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
-and decision tree regression, please the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
+and decision tree regression, please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
 ```code
 python main.py --name sbm_2
@@ -76,7 +76,7 @@ and a fixed number of 500 iterations. The tuning parameter &lambda; in algorithm
 is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 . 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
-and decision tree regression, please see the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
+and decision tree regression, please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
 
 | Method name                    | Train MSE       | Tes MSE        |
@@ -106,7 +106,7 @@ in G we do not know the labels y<sup>(i)</sup> but predict them with the
 weight vectors w&#770;<sup>(i)</sup> obtained from Algorithm 1 
 (using a fixed number of 1000 iterations, and λ = 0.2).
 We compare the MSE of our method with simple linear regression 
-and decision tree regression. please see the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/3d_road_experiment.ipynb).
+and decision tree regression. please see the implementation at [3d_road_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/3d_road_experiment.ipynb).
 
 | Method name                    | Train MSE       | Tes MSE        |
 | ------------------             |---------------- | -------------- |
