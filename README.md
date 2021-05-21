@@ -162,4 +162,5 @@ See the implementation at [deep_learning_experiment.ipynb](https://github.com/sa
 
 ## Contributing
 
->📋  Pick a licence and describe how to contribute to your code repository. 
+This repository is distributed under the BSD [3-Clause License](https://github.com/sahelyiyi/FederatedLearning/blob/master/LICENSE).
+
