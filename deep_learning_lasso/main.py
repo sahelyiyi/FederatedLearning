@@ -82,7 +82,7 @@ def deep_learning_run(lambda_lasso=0.001, K=1000, penalty_func='norm1', train_da
 
     # alg1
     print ('start alg')
-    data = prepare_data_for_algorithm1(B, X, Y, samplingset, loss_func='linear_reg')
+    data = prepare_data_for_algorithm1(B, X, Y, loss_func='linear_reg')
     _, alg1_estimated_weights = algorithm_1(K, B, weight_vec, data, Y, samplingset, lambda_lasso, penalty_func)
     '''
     alg1_estimated_weights : The estimated weights by algorithm 1
