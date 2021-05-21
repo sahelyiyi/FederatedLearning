@@ -53,9 +53,6 @@ We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
 and decision tree regression, please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
-```code
-python main.py --name sbm_2
-```
 
 >📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
