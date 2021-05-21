@@ -58,7 +58,7 @@ and decision tree regression, please see the implementation at [SBM_experiment.i
 
 
 
-| Method name                    | Train MSE       | Tes MSE        |
+| Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
 | algorithm 1                    |    7.11e-06     |     9.18e-06   |
 | plain linear regression        |    3.150        |     4.212      |
@@ -76,7 +76,7 @@ as the result we compare the MSE of Algorithm 1 with plain linear regression
 and decision tree regression, please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/SBM_experiment.ipynb).
 
 
-| Method name                    | Train MSE       | Tes MSE        |
+| Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
 | algorithm 1                    |    6.22e-06     |     8.99e-06   |
 | plain linear regression        |    0.1270       |     0.1344     |
@@ -105,7 +105,7 @@ weight vectors w&#770;<sup>(i)</sup> obtained from Algorithm 1
 We compare the MSE of our method with simple linear regression 
 and decision tree regression. please see the implementation at [3d_road_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/3d_road_experiment.ipynb).
 
-| Method name                    | Train MSE       | Tes MSE        |
+| Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
 | algorithm 1                    |    0.023        |     20.898     |
 | plain linear regression        |    278.67       |     296.69     |
