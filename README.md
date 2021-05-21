@@ -58,9 +58,9 @@ and decision tree regression, please see the implementation at [SBM_experiment.i
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1                    |    7.11e-06     |     9.18e-06   |
-| plain linear regression        |    3.150        |     4.212      |
-| decision tree regression       |    3.338        |     4.598      |
+| algorithm 1                    |    4.56e-06     |     4.87e-06   |
+| plain linear regression        |    3.673        |     3.852      |
+| decision tree regression       |    3.823        |     4.608      |
 
 
 
@@ -76,9 +76,9 @@ and decision tree regression, please see the implementation at [SBM_experiment.i
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1                    |    6.22e-06     |     8.99e-06   |
-| plain linear regression        |    0.1270       |     0.1344     |
-| decision tree regression       |    0.3158       |     0.3075     |
+| algorithm 1                    |    5.04e-06     |     2.07e-06   |
+| plain linear regression        |    0.0919       |     0.0739     |
+| decision tree regression       |    0.4269       |     0.4886     |
 
 
 ### 3D Road Network Dataset
@@ -105,9 +105,9 @@ and decision tree regression. please see the implementation at [3d_road_experime
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1                    |    0.023        |     20.898     |
-| plain linear regression        |    278.67       |     296.69     |
-| decision tree regression       |    181.60       |     174.05     |
+| algorithm 1                    |    0.0231       |     24.295     |
+| plain linear regression        |    294.03       |     285.25     |
+| decision tree regression       |    177.21       |     171.68     |
 
 
 ### Networked Federated Deep Learning
@@ -142,7 +142,7 @@ the sampling set, which is 20 nodes, the total time would be 402 minutes
 (402 << 2000).
 
 
-![Screenshot](train_accuracy_0.001.png)
+![Screenshot](results/deeplearning_accuracy.png)
 
 Fig: The accuracy for each model obtained after 1000 number of iterations 
 used in Algorithm 1 based on the squared error loss . 
