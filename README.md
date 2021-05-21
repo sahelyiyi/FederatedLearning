@@ -91,26 +91,29 @@ and decision tree regression, please see the [implementation](https://github.com
 This dataset is constructed by adding elevation information to the [3D road 
 network in North Jutland, Denmark](https://archive.ics.uci.edu/ml/datasets/3D+Road+Network+(North+Jutland,+Denmark)#) (covering a region of 185 × 135 km2), 
 containing LATITUDE, LONGITUDE, and also ALTITUDE of regions. 
-We consider a graph G represents this dataset, which its nodes
-are initially the combined 5 nearest regions and are connected 
+We consider a graph G represents this dataset, which its nodes 
+are the regions of the dataset and are connected 
 by edges to their nearby neighbours with the weights that are 
 related to the distances between them. So the feature vector 
-X<sup>(i)</sup> ∈ R<sup>5*2</sup> of node i ∈ V contains 
-the latitude and longitude of the combined regions, and the 
-label y<sup>(i)</sup> ∈ R<sup>5</sup> is their altitudes.
+X<sup>(i)</sup> ∈ R<sup>1*2</sup> of node i ∈ V contains 
+the latitude and longitude of its corresponding region, and the 
+label y<sup>(i)</sup> ∈ R is its altitudes.
 
 We use Algorithm 1 to learn the weight vectors w<sup>(i)</sup>
 for a localized linear model. We assume that labels y<sup>(i)</sup>
-are available for 70% of the graph nodes, thus, for 30% of the nodes 
+are available for 30% of the graph nodes, thus, for 70% of the nodes 
 in G we do not know the labels y<sup>(i)</sup> but predict them with the 
 weight vectors w&#770;<sup>(i)</sup> obtained from Algorithm 1 
-(using a fixed number of 1000 iterations, and λ = 0.1).
+(using a fixed number of 1000 iterations, and λ = 0.2).
 We compare the MSE of our method with simple linear regression 
-and decision tree regression. please run :
+and decision tree regression. please see the [implementation](https://github.com/sahelyiyi/FederatedLearning/blob/master/3d_road_experiment.ipynb).
 
-```code
-python main.py --name 3d_road
-```
+| Method name                    | Train MSE       | Tes MSE        |
+| ------------------             |---------------- | -------------- |
+| algorithm 1                    |    0.023        |     20.898     |
+| plain linear regression        |    278.67       |     296.69     |
+| decision tree regression       |    181.60       |     174.05     |
+
 
 ### Networked Federated Deep Learning
 

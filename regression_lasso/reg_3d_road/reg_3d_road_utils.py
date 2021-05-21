@@ -72,7 +72,7 @@ def get_graph_data(raw_data):
     N = len(node_indices)
     X = np.zeros((N, 1, 2))
     Y = np.zeros((N, 1))
-    for i, item in enumerate(data):
+    for item in data:
         lat, log = item[0]
         if (lat, log) not in node_indices:
             continue
@@ -80,8 +80,6 @@ def get_graph_data(raw_data):
         idx = node_indices[(lat, log)]
         X[idx] = np.array([lat, log]).T
         Y[idx] = np.array([item[1]])
-
-    m, n = X[0].shape
 
     B = np.zeros((E, N))
     weight_vec = np.zeros(E)
