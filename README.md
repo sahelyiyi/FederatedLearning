@@ -157,11 +157,7 @@ the accuracy of the models by training its weights by the deep neural
 network after three epochs.
 
 
-For reproducing the image please run :
-
-```code
-python main.py --name deep_learning
-```
+See the implementation at [deep_learning_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/deep_learning_experiment.ipynb).
 
 
 ## Contributing
