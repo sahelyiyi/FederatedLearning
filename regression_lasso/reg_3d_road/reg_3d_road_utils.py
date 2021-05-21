@@ -7,7 +7,7 @@ def load_data(data_path='regression_lasso/reg_3d_road/3D_spatial_network.txt'):
     with open(data_path, 'r') as f:
         data = f.read().split('\n')
     data = data[:-1]
-    data = data[:500]
+    data = data[:1000]
     fixed_data = []
     for item in data:
         item = item.split(',')
