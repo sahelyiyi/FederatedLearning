@@ -1,5 +1,3 @@
-commit -m ''# Federated Multi-Task Learning from Big Data over Networks
-
 This repository is the official implementation of [Federated Multi-Task Learning from Big Data over Networks](https://arxiv.org/abs/2030.12345) paper. 
 
 ![alt text](algorithm1.png)
