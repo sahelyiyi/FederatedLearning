@@ -36,6 +36,11 @@ In this repository we have multiple experiments
 
 ### Stochastic Block Model
 
+As mentioned in the paper, Algorithm 1 will predict almost the same weight 
+vectors for the nodes within the well-connected clusters. So one reasonable 
+experiment would be a network with stochastic block structure.
+
+
 * With Two Clusters: This SBM has two clusters |C<sub>1</sub>| =  |C<sub>2</sub>| = 100.
 Two nodes within the same cluster are connected by an edge with probability `pin=0.5`, 
 and two nodes from different clusters are connected by an edge with probability `pout=0.01`. 
@@ -50,9 +55,6 @@ for i &in; C<sub>1</sub>, and w<sup>(i)</sup> = (-2, 2)<sup>T</sup> for i &in; C
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
 as the result we compare the MSE of Algorithm 1 with plain linear regression 
 and decision tree regression, please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/SBM_experiment.ipynb).
-
-
->📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
 
 
