@@ -20,11 +20,12 @@ The package related to the algorithm implementation is
 For running your own primal and dual optimizers you can inherit a class from `class Optimizer` 
 and `class Penalty` respectively.
 
-This Algorithm does not need any particular computational resource type 
-and all the experiments have run in my own laptop, just the bottleneck could 
-be RAM, if you have a dataset such that its network has a large number of 
-nodes/edges, you might need to run this algorithm in a server with 
-the needed RAM. 
+This Algorithm does not need any computational resource type and all the 
+experiments have run on my own laptop which is a standard macbook 
+(Quad-Core Intel Core i5 and 8 GB RAM), 
+just the bottleneck might be RAM, if you have a dataset such that its network 
+has a large number of nodes/edges, you might need to run the algorithm 
+in a system with the required RAM. 
 
 ## Requirements
 
@@ -58,7 +59,11 @@ The labels y<sup>i</sup><sub>1</sub>, ... , y<sup>i</sup><sub>m</sub> &in; R for
 are generated according to the linear model y<sup>i</sup><sub>r</sub> = (x<sup>(i, r)</sup>)<sup>T</sup>w&#772;<sup>(i)</sup> +  &epsilon; , 
 with &epsilon; &in; N(0,&sigma;), weight vector w<sup>(i)</sup> = (2, 2)<sup>T</sup>
 for i &in; C<sub>1</sub>, and w<sup>(i)</sup> = (-2, 2)<sup>T</sup> for i &in; C<sub>2</sub>. 
-We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
+The tuning parameter &lambda; in algorithm1 
+is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 for norm1 and norm2 
+and also &lambda; = 0.05 for mocha penalty function. 
+We assume that labels y<sup>(i)</sup> are available for 40% of the graph nodes.
+We randomly choose the training set M and use the rest as test set.
 As the result we compare the mean MSE of Algorithm 1 with plain linear regression 
 and decision tree regression with respect to the different random sampling sets,
  please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/SBM_experiment.ipynb).
@@ -67,11 +72,11 @@ and decision tree regression with respect to the different random sampling sets,
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1, norm1             |    3.76e-06     |     3.64e-06   |
-| algorithm 1, norm2             |    3.76e-06     |     3.66e-06   |
-| algorithm 1, mocha             |    0.0001       |     0.2591     |
-| plain linear regression        |    3.991        |     3.853      |
-| decision tree regression       |    4.171        |     4.464      |
+| algorithm 1, norm1             |    9.78e-06     |     1.06e-05   |
+| algorithm 1, norm2             |    9.80e-06     |     1.06e-05   |
+| algorithm 1, mocha             |    0.0012       |     0.0633     |
+| plain linear regression        |    3.720        |     4.031      |
+| decision tree regression       |    3.762        |     4.499      |
 
 
 
@@ -79,8 +84,10 @@ and decision tree regression with respect to the different random sampling sets,
 with random weight vectors ∈ R<sup>2</sup> selected uniformly from [0,1) . 
 We run Algorithm 1 with a fixed pin = 0.5 and pout = 0.001, 
 and a fixed number of 500 iterations. The tuning parameter &lambda; in algorithm1 
-is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 . 
+is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 for norm1 and norm2 
+and also &lambda; = 0.05 for mocha penalty function. 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
+We randomly choose the training set M and use the rest as test set.
 As the result we compare the mean MSE of Algorithm 1 with plain linear regression 
 and decision tree regression with respect to the different random sampling sets,
  please see the implementation at [SBM_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/SBM_experiment.ipynb).
@@ -88,11 +95,11 @@ and decision tree regression with respect to the different random sampling sets,
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1, norm1             |    0.0001       |     0.0003     |
-| algorithm 1, norm2             |    5.20e-05     |     8.99e-05   |
-| algorithm 1, mocha             |    5.69e-06     |     0.0009     |
-| plain linear regression        |    0.1358       |     0.1431     |
-| decision tree regression       |    0.3562       |     0.3943     |
+| algorithm 1, norm1             |    3.83e-06     |     7.93e-06   |
+| algorithm 1, norm2             |    4.24e-06     |     5.72e-06   |
+| algorithm 1, mocha             |    9.15e-06     |     0.0012     |
+| plain linear regression        |    0.1383       |     0.1485     |
+| decision tree regression       |    0.2973       |     0.3483     |
 
 
 ### 3D Road Network Dataset
@@ -114,17 +121,18 @@ are available for 30% of the graph nodes, thus, for 70% of the nodes
 in G we do not know the labels y<sup>(i)</sup> but predict them with the 
 weight vectors w&#770;<sup>(i)</sup> obtained from Algorithm 1 
 (using a fixed number of 1000 iterations, and λ = 0.2).
+We randomly choose the training set M and use the rest as test set.
 As the result we compare the mean MSE of Algorithm 1 with plain linear regression 
 and decision tree regression with respect to the different random sampling sets,
  please see the implementation at [3d_road_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/3d_road_experiment.ipynb).
 
 | Method name                    | Train MSE       | Test MSE       |
 | ------------------             |---------------- | -------------- |
-| algorithm 1, norm1             |    0.0249       |     38.657     |
-| algorithm 1, norm2             |    0.0242       |     38.660     |
-| algorithm 1, mocha             |    1.96e-05     |     32.397     |
-| plain linear regression        |    278.44       |     293.14     |
-| decision tree regression       |    165.34       |     175.33     |
+| algorithm 1, norm1             |    0.0243       |     24.625     |
+| algorithm 1, norm2             |    0.0236       |     24.621     |
+| algorithm 1, mocha             |    2.03e-05     |     20.977     |
+| plain linear regression        |    286.44       |     289.65     |
+| decision tree regression       |    167.42       |     175.36     |
 
 
 ### Networked Federated Deep Learning
@@ -154,9 +162,9 @@ Our method has increased the overall accuracy of the nodes in a significant
 shorter time, the needed time for training each model with 
 three learning epochs is almost 20 minutes, so training 100 models 
 lasts 2000 minutes, while the computation time for our algorithm 
-itself is less than 2 minutes. by adding the time for training 
-the sampling set, which is 20 nodes, the total time would be 402 minutes 
-(402 << 2000).
+itself is less than 5 minutes. by adding the time for training 
+the sampling set, which is 20 nodes, the total time would be 405 minutes 
+(405 << 2000).
 
 
 ![Screenshot](results/deeplearning_accuracy.png)
@@ -170,7 +178,8 @@ network after three epochs.
 
 
 See the implementation at [deep_learning_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/deep_learning_experiment.ipynb).
-
+(Just notice that loading the trained deep learning data and 
+creating the corresponding graph is rather time consuming.)
 
 ## Contributing
 
