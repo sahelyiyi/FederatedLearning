@@ -1,4 +1,4 @@
-This repository is the official implementation of [Federated Multi-Task Learning from Big Data over Networks](https://arxiv.org/abs/2030.12345) paper. 
+This repository is the official implementation of [Networked Federated Multi-Task Learning](https://arxiv.org/pdf/2105.12769.pdf) paper. 
 
 ![alt text](algorithm1.png)
 
@@ -83,7 +83,7 @@ and decision tree regression with respect to the different random sampling sets,
 * With Five Clusters: The size of the clusters are {70, 10, 50, 100, 150} 
 with random weight vectors ∈ R<sup>2</sup> selected uniformly from [0,1) . 
 We run Algorithm 1 with a fixed pin = 0.5 and pout = 0.001, 
-and a fixed number of 500 iterations. The tuning parameter &lambda; in algorithm1 
+and a fixed number of 1000 iterations. The tuning parameter &lambda; in algorithm1 
 is manually chosen, guided by the resulting MSE, as &lambda; = 0.01 for norm1 and norm2 
 and also &lambda; = 0.05 for mocha penalty function. 
 We assume that labels y<sup>(i)</sup> are available for 20% of the graph nodes.
@@ -138,7 +138,7 @@ and decision tree regression with respect to the different random sampling sets,
 ### Networked Federated Deep Learning
 
 In this section, we tested our method with Tensorflow ”cats vs dogs” Classification Dataset.
-For both datasets, each node of the empirical graph G stands for 
+Each node of the empirical graph G stands for 
 a deep neural network in which the base model is 
 Xception (with 132 layers) and has trained on the ImageNet dataset, 
 also the new model containes a Global Average Pooling 2D, a Dropout, 
@@ -178,7 +178,7 @@ network after three epochs.
 
 
 See the implementation at [deep_learning_experiment.ipynb](https://github.com/sahelyiyi/FederatedLearning/blob/master/experiments/deep_learning_experiment.ipynb).
-(Just notice that loading the trained deep learning data and 
+(Just note that loading the trained deep learning data and 
 creating the corresponding graph is rather time consuming.)
 
 ## Contributing
