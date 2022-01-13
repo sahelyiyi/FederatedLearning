@@ -77,7 +77,7 @@ def get_decision_tree_MSE(x, y, samplingset, not_samplingset):
     return decision_tree_MSE
 
 
-def get_scores(datapoints, predicted_w, samplingset):
+def get_scores(datapoints, predicted_w, fl_w, samplingset, others=True):
     N = len(datapoints)
     '''
     N : the total number of nodes
@@ -85,37 +85,43 @@ def get_scores(datapoints, predicted_w, samplingset):
 
     # calculate algorithm1 MSE
     alg_1_score = get_algorithm1_MSE(datapoints, predicted_w, samplingset)
+    fl_score = get_algorithm1_MSE(datapoints, fl_w, samplingset)
 
-    # prepare the data for calculating the linear regression and decision tree regression MSEs
-    X = []
-    '''
-    X: an array containing the features of all the nodes
-    '''
-    true_labels = []
-    '''
-    true_labels: an array containing the labels of all the nodes
-    '''
-    for i in range(len(datapoints)):
-        X.append(np.array(datapoints[i]['features']))
-        true_labels.append(np.array(datapoints[i]['label']))
+    linear_regression_score = None
+    decision_tree_score = None
 
-    X = np.array(X)
-    true_labels = np.array(true_labels)
-    m, n = X[0].shape
+    if others:
+        # prepare the data for calculating the linear regression and decision tree regression MSEs
+        X = []
+        '''
+        X: an array containing the features of all the nodes
+        '''
+        true_labels = []
+        '''
+        true_labels: an array containing the labels of all the nodes
+        '''
+        for i in range(len(datapoints)):
+            X.append(np.array(datapoints[i]['features']))
+            true_labels.append(np.array(datapoints[i]['label']))
 
-    x = X.reshape(-1, n)
-    y = true_labels.reshape(-1, 1)
+        X = np.array(X)
+        true_labels = np.array(true_labels)
+        m, n = X[0].shape
 
-    reformated_samplingset = []
-    for item in samplingset:
-        for i in range(m):
-            reformated_samplingset.append(m * item + i)
-    reformated_not_samplingset = [i for i in range(m * N) if i not in reformated_samplingset]
+        x = X.reshape(-1, n)
+        y = true_labels.reshape(-1, 1)
 
-    # calculate linear regression MSE
-    linear_regression_score = get_linear_regression_MSE(x, y, reformated_samplingset, reformated_not_samplingset)
+        reformated_samplingset = []
+        for item in samplingset:
+            for i in range(m):
+                reformated_samplingset.append(m * item + i)
+        reformated_not_samplingset = [i for i in range(m * N) if i not in reformated_samplingset]
 
-    # calculate decision tree MSE
-    decision_tree_score = get_decision_tree_MSE(x, y, reformated_samplingset, reformated_not_samplingset)
+        # calculate linear regression MSE
+        linear_regression_score = get_linear_regression_MSE(x, y, reformated_samplingset, reformated_not_samplingset)
 
-    return alg_1_score, linear_regression_score, decision_tree_score
+        # calculate decision tree MSE
+        decision_tree_score = get_decision_tree_MSE(x, y, reformated_samplingset, reformated_not_samplingset)
+
+    return alg_1_score, fl_score, linear_regression_score, decision_tree_score
+
